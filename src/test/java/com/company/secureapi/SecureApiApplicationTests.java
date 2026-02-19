@@ -1,4 +1,4 @@
-package com.company.secureapi.secureapi;
+package com.company.secureapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
