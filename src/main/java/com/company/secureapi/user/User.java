@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false)
     private AccountStatus accountStatus;
 
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     public User() {
@@ -40,14 +40,19 @@ public class User {
                 String email,
                 String password,
                 Role role,
-                AccountStatus accountStatus,
-                LocalDateTime createdAt) {
+                AccountStatus accountStatus) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
         this.accountStatus = accountStatus;
-        this.createdAt = createdAt;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 
     public Long getId() {

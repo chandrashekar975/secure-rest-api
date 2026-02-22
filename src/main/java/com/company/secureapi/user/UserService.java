@@ -1,12 +1,11 @@
 package com.company.secureapi.user;
 
 import com.company.secureapi.auth.RegisterRequest;
+import com.company.secureapi.exception.DuplicateEmailException;
+import com.company.secureapi.exception.DuplicateUsernameException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.dao.DataIntegrityViolationException;
-import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -29,41 +28,31 @@ public class UserService {
                     "admin@company.com",
                     passwordEncoder.encode(adminPassword),
                     Role.ADMIN,
-                    AccountStatus.ACTIVE,
-                    LocalDateTime.now()
+                    AccountStatus.ACTIVE
             );
 
             userRepository.save(admin);
         }
     }
 
-    @Transactional
     public User createEmployee(RegisterRequest request){
-        String normalizedUsername = request.getUsername().trim().toLowerCase();
-        String normalizedEmail = request.getEmail().trim().toLowerCase();
 
-        if (userRepository.existsByUsername(normalizedUsername)) {
-            throw new DuplicateResourceException("Username already exists");
+        if(userRepository.existsByUsername(request.getUsername())){
+            throw new DuplicateUsernameException();
         }
 
-        if (userRepository.existsByEmail(normalizedEmail)) {
-            throw new DuplicateResourceException("Email already exists");
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new DuplicateEmailException();
         }
 
-        try {
-            User user = new User(
-                    normalizedUsername,
-                    normalizedEmail,
-                    passwordEncoder.encode(request.getPassword()),
-                    Role.EMPLOYEE,
-                    AccountStatus.ACTIVE,
-                    java.time.LocalDateTime.now()
-            );
+        User user = new User(
+                request.getUsername(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                Role.EMPLOYEE,
+                AccountStatus.ACTIVE
+        );
 
-            return userRepository.save(user);
-
-        } catch (DataIntegrityViolationException ex) {
-            throw new DuplicateResourceException("Username or Email already exists");
-        }
+        return userRepository.save(user);
     }
 }
