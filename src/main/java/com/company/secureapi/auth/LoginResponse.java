@@ -1,3 +1,4 @@
+package com.company.secureapi.auth;
 public class LoginResponse {
 
     private final String token;
