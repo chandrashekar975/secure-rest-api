@@ -4,7 +4,8 @@ import com.company.secureapi.auth.RegisterRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import java.time.LocalDateTime;
 
 @Service
@@ -36,25 +37,33 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User createEmployee(RegisterRequest request){
+        String normalizedUsername = request.getUsername().trim().toLowerCase();
+        String normalizedEmail = request.getEmail().trim().toLowerCase();
 
-        if(userRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("Username already exists");
+        if (userRepository.existsByUsername(normalizedUsername)) {
+            throw new DuplicateResourceException("Username already exists");
         }
 
-        if(userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already exists");
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new DuplicateResourceException("Email already exists");
         }
 
-        User user = new User(
-                request.getUsername(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                Role.EMPLOYEE,
-                AccountStatus.ACTIVE,
-                java.time.LocalDateTime.now()
-        );
+        try {
+            User user = new User(
+                    normalizedUsername,
+                    normalizedEmail,
+                    passwordEncoder.encode(request.getPassword()),
+                    Role.EMPLOYEE,
+                    AccountStatus.ACTIVE,
+                    java.time.LocalDateTime.now()
+            );
 
-        return userRepository.save(user);
+            return userRepository.save(user);
+
+        } catch (DataIntegrityViolationException ex) {
+            throw new DuplicateResourceException("Username or Email already exists");
+        }
     }
 }

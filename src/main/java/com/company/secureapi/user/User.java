@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false)
     private AccountStatus accountStatus;
 
-    @Column(nullable = false)
+    @Column(nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
     public User() {
