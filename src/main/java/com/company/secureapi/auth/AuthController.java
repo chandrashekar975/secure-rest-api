@@ -30,4 +30,9 @@ public class AuthController {
                 user.getRole().name()
         );
     }
+
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return userService.authenticate(request);
+    }
 }

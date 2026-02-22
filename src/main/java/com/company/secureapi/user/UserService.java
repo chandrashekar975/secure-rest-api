@@ -1,8 +1,11 @@
 package com.company.secureapi.user;
 
+import com.company.secureapi.auth.LoginResponse;
+import com.company.secureapi.auth.LoginRequest;
 import com.company.secureapi.auth.RegisterRequest;
 import com.company.secureapi.exception.DuplicateEmailException;
 import com.company.secureapi.exception.DuplicateUsernameException;
+import com.company.secureapi.exception.InvalidCredentialsException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,5 +57,21 @@ public class UserService {
         );
 
         return userRepository.save(user);
+    }
+
+    public LoginResponse authenticate(LoginRequest request){
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(InvalidCredentialsException::new);
+
+        boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
+        if (!passwordMatches || user.getAccountStatus() != AccountStatus.ACTIVE) {
+            throw new InvalidCredentialsException();
+        }
+
+        return new LoginResponse(
+                "Login successful",
+                user.getUsername(),
+                user.getRole().name()
+        );
     }
 }
