@@ -6,6 +6,7 @@ import com.company.secureapi.auth.RegisterRequest;
 import com.company.secureapi.exception.DuplicateEmailException;
 import com.company.secureapi.exception.DuplicateUsernameException;
 import com.company.secureapi.exception.InvalidCredentialsException;
+import com.company.secureapi.security.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,12 +24,16 @@ public class UserService {
     @Value("${ADMIN_PASSWORD}")
     private String adminPassword;
 
+    private final JwtService jwtService;
+
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager,
+                       JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public void createAdminIfNotExists() {
@@ -88,8 +93,13 @@ public class UserService {
             throw new InvalidCredentialsException();
         }
 
+        String token = jwtService.generateToken(
+                user.getUsername(),
+                user.getRole().name()
+        );
+
         return new LoginResponse(
-                "Login successful",
+                token,
                 user.getUsername(),
                 user.getRole().name()
         );

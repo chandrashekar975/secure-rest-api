@@ -1,19 +1,17 @@
-package com.company.secureapi.auth;
-
 public class LoginResponse {
 
-    private final String message;
+    private final String token;
     private final String username;
     private final String role;
 
-    public LoginResponse(String message, String username, String role) {
-        this.message = message;
+    public LoginResponse(String token, String username, String role) {
+        this.token = token;
         this.username = username;
         this.role = role;
     }
 
-    public String getMessage() {
-        return message;
+    public String getToken() {
+        return token;
     }
 
     public String getUsername() {
