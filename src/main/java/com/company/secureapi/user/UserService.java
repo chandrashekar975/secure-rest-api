@@ -6,6 +6,9 @@ import com.company.secureapi.auth.RegisterRequest;
 import com.company.secureapi.exception.DuplicateEmailException;
 import com.company.secureapi.exception.DuplicateUsernameException;
 import com.company.secureapi.exception.InvalidCredentialsException;
+import com.company.secureapi.refresh.RefreshToken;
+import com.company.secureapi.refresh.RefreshTokenRepository;
+import com.company.secureapi.refresh.RefreshTokenService;
 import com.company.secureapi.security.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,14 +16,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
+    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
     @Value("${ADMIN_PASSWORD}")
     private String adminPassword;
 
@@ -29,11 +33,14 @@ public class UserService {
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
-                       JwtService jwtService) {
+                       JwtService jwtService,
+                       RefreshTokenService refreshTokenService, RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public void createAdminIfNotExists() {
@@ -76,7 +83,7 @@ public class UserService {
 
         return userRepository.save(user);
     }
-
+    @Transactional
     public LoginResponse authenticate(LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -93,15 +100,23 @@ public class UserService {
             throw new InvalidCredentialsException();
         }
 
+        // 🔥 IMPORTANT FIX: Delete old refresh token
+        refreshTokenRepository.deleteByUser(user);
+
+        // 🔹 Generate access token
         String token = jwtService.generateToken(
                 user.getUsername(),
                 user.getRole().name()
         );
 
+        // 🔹 Generate refresh token (your existing logic)
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
         return new LoginResponse(
                 token,
                 user.getUsername(),
-                user.getRole().name()
+                user.getRole().name(),
+                refreshToken.getToken()   // if you added this already
         );
     }
 }
