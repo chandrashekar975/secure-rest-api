@@ -40,6 +40,7 @@ public class RefreshTokenService {
         return rt;
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void deleteByUser(User user) {
         repository.deleteByUserId(user.getId());
     }

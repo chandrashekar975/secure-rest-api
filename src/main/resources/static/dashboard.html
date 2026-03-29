@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: var(--surface-hover);
+            color: var(--text-main);
+        }
+
+        .flex-spacer {
+            flex-grow: 1;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .role-badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border-color: #475569;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-admin {
+            background: #059669;
+        }
+
+        .btn-admin:hover {
+            background: #047857;
+        }
+
+        .btn-auditor {
+            background: #ea580c;
+        }
+
+        .btn-auditor:hover {
+            background: #c2410c;
+        }
+
+        .btn-secondary {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        /* Terminals / logs */
+        .terminal {
+            background: #000;
+            border-radius: 12px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #34d399;
+            height: 250px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .terminal span.error-text {
+            color: var(--error);
+        }
+
+        .terminal span.warn-text {
+            color: var(--warning);
+        }
+
+        .terminal span.info-text {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">✦ SecureAPI</div>
+        <div class="nav-item active">Dashboard</div>
+        <div class="nav-item">Settings</div>
+
+        <div class="flex-spacer"></div>
+        <div class="nav-item logout-btn" onclick="logout()">Logout</div>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <div>
+                <h1 style="margin:0; font-size: 28px;">Overview</h1>
+                <p style="margin: 4px 0 0 0; color: var(--text-muted);">Manage your system access via JWT & RBAC</p>
+            </div>
+            <div>
+                <span class="role-badge" id="user-role-badge">Loading Role...</span>
+            </div>
+        </header>
+
+        <div class="dashboard-grid">
+            <!-- Normal User Action -->
+            <div class="card">
+                <h3>💬 Generic API</h3>
+                <p>Anyone with a valid JWT can access this endpoint regardless of role.</p>
+                <button class="btn" onclick="callApi('GET', '/api/test/all')">Test Endpoint</button>
+            </div>
+
+            <!-- Admin Action -->
+            <div class="card">
+                <h3>🛡️ Admin API</h3>
+                <p>Only users with the ADMIN role can execute this action.</p>
+                <button class="btn btn-admin" onclick="callApi('GET', '/api/admin/system')">Test Admin</button>
+            </div>
+
+            <!-- Auditor Action -->
+            <div class="card">
+                <h3>📜 Auditor API</h3>
+                <p>Only users with the AUDITOR role can view system logs.</p>
+                <button class="btn btn-auditor" onclick="callApi('GET', '/api/auditor/logs')">Fetch DB Logs</button>
+            </div>
+
+            <!-- Token Management -->
+            <div class="card">
+                <h3>🔄 Token Refresh</h3>
+                <p>Simulate an expired access token and refresh it using the secure refresh endpoint.</p>
+                <button class="btn btn-secondary" onclick="refreshToken()">Force Token Refresh</button>
+            </div>
+
+            <div class="card">
+                <h3>🚦 Rate Limit Test</h3>
+                <p>Spam this to trigger Bucket4j's HTTP 429 Too Many Requests response.</p>
+                <button class="btn btn-secondary" onclick="spamApi()">Spam Requests</button>
+            </div>
+        </div>
+
+        <h3>Response Terminal</h3>
+        <div class="terminal" id="terminal">
+            <div>System initialized. Waiting for actions...</div>
+        </div>
+    </main>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+
+        function logToTerminal(message, type = 'info') {
+            const div = document.createElement('div');
+            const ts = new Date().toISOString().split('T')[1].split('.')[0];
+
+            let colorClass = 'info-text';
+            if (type === 'error') colorClass = 'error-text';
+            if (type === 'warn') colorClass = 'warn-text';
+            if (type === 'success') colorClass = '';
+
+            div.innerHTML = `<span style="color:#64748b">[${ts}]</span> <span class="${colorClass}">${message}</span>`;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Initialize user data
+        function init() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            const role = localStorage.getItem('role') || 'UNKNOWN';
+            document.getElementById('user-role-badge').textContent = `Role: ${role}`;
+            logToTerminal(`Session restored with role: ${role}`);
+        }
+
+        async function callApi(method, endpoint) {
+            logToTerminal(`Executing ${method} request to ${endpoint}...`);
+            let token = localStorage.getItem('accessToken');
+
+            try {
+                let res = await fetch(endpoint, {
+                    method: method,
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                // If token expired
+                if (res.status === 401) {
+                    logToTerminal('Token expired, attempting refresh...', 'warn');
+                    const refreshed = await refreshToken();
+                    if (refreshed) {
+                        token = localStorage.getItem('accessToken');
+                        logToTerminal('Retrying original request...', 'info');
+                        res = await fetch(endpoint, {
+                            method: method,
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                    } else {
+                        return; // Refresh failed, user will be logged out by refreshToken logic
+                    }
+                }
+
+                if (res.status === 403) {
+                    logToTerminal(`403 FORBIDDEN: Access Denied. You do not have the required role.`, 'error');
+                    return;
+                }
+
+                if (res.status === 429) {
+                    logToTerminal(`429 TOO MANY REQUESTS: Rate limit triggered (Bucket4j).`, 'error');
+                    return;
+                }
+
+                let data;
+                try {
+                    data = await res.json();
+                } catch (e) {
+                    data = await res.text();
+                }
+
+                if (res.ok) {
+                    logToTerminal(`SUCCESS (${res.status}): ${typeof data === 'object' ? JSON.stringify(data, null, 2) : data}`, 'success');
+                } else {
+                    logToTerminal(`ERROR (${res.status}): ${JSON.stringify(data)}`, 'error');
+                }
+
+            } catch (err) {
+                logToTerminal(`Network Error: ${err.message}`, 'error');
+            }
+        }
+
+        async function spamApi() {
+            logToTerminal(`Initiating burst of 10 requests to test Rate Limiting...`, 'warn');
+            for (let i = 0; i < 10; i++) {
+                callApi('GET', '/api/test/all');
+            }
+        }
+
+        async function refreshToken() {
+            const rfToken = localStorage.getItem('refreshToken');
+            logToTerminal(`Requesting new access token using refresh token...`);
+
+            try {
+                const res = await fetch(`/api/v1/auth/refresh?refreshToken=${rfToken}`, {
+                    method: 'POST'
+                });
+
+                if (!res.ok) {
+                    logToTerminal('Refresh token invalid or expired. Session terminated.', 'error');
+                    setTimeout(() => logout(false), 2000);
+                    return false;
+                }
+
+                const data = await res.json();
+                localStorage.setItem('accessToken', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
+                logToTerminal('Successfully acquired new access token.', 'success');
+                return true;
+
+            } catch (err) {
+                logToTerminal(`Refresh Error: ${err.message}`, 'error');
+                return false;
+            }
+        }
+
+        async function logout(callApiFirst = true) {
+            logToTerminal('Logging out...', 'warn');
+            const rfToken = localStorage.getItem('refreshToken');
+
+            if (callApiFirst && rfToken) {
+                try {
+                    await fetch(`/api/v1/auth/logout?refreshToken=${rfToken}`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+                    });
+                } catch (e) { }
+            }
+
+            localStorage.clear();
+            window.location.href = '/index.html';
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

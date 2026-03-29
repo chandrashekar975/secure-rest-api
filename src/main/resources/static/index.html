@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure API Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --error: #ef4444;
+        }
+
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Animated background elements */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: #4f46e5;
+            top: -100px;
+            left: -100px;
+            border-radius: 50%;
+        }
+
+        .blob-2 {
+            width: 350px;
+            height: 350px;
+            background: #e11d48;
+            bottom: -50px;
+            right: -50px;
+            border-radius: 50%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(50px, 50px) scale(1.1);
+            }
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: 700;
+            font-size: 28px;
+            background: linear-gradient(to right, #a5b4fc, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-text span {
+            color: #a5b4fc;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .toggle-text span:hover {
+            text-decoration: underline;
+        }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 20px;
+            color: var(--error);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="glass-panel" id="login-panel">
+        <h2 id="form-title">Welcome Back</h2>
+
+        <form id="auth-form">
+            <div class="form-group" id="email-group" class="hidden" style="display: none;">
+                <label for="email">Email address</label>
+                <input type="email" id="email" class="form-control" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" required autocomplete="current-password">
+            </div>
+
+            <div class="form-group" id="role-group" style="display: none;">
+                <label for="role">Role</label>
+                <select id="role" class="form-control" style="background: rgba(0,0,0,0.4); color: white;">
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="AUDITOR">AUDITOR</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn" id="submit-btn">Sign In</button>
+        </form>
+
+        <div id="message"></div>
+
+        <div class="toggle-text">
+            <span id="toggle-pText">Don't have an account? <span id="toggle-action">Sign up</span></span>
+        </div>
+    </div>
+
+    <script>
+        let isLogin = true;
+
+        const formTitle = document.getElementById('form-title');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleAction = document.getElementById('toggle-action');
+        const togglePText = document.getElementById('toggle-pText');
+        const emailGroup = document.getElementById('email-group');
+        const roleGroup = document.getElementById('role-group');
+        const form = document.getElementById('auth-form');
+        const msgDiv = document.getElementById('message');
+
+        toggleAction.addEventListener('click', () => {
+            isLogin = !isLogin;
+            msgDiv.textContent = '';
+
+            if (isLogin) {
+                formTitle.textContent = 'Welcome Back';
+                submitBtn.textContent = 'Sign In';
+                emailGroup.style.display = 'none';
+                roleGroup.style.display = 'none';
+                togglePText.innerHTML = `Don't have an account? <span id="toggle-action" style="color: #a5b4fc; cursor: pointer; font-weight: 600;">Sign up</span>`;
+            } else {
+                formTitle.textContent = 'Create Account';
+                submitBtn.textContent = 'Sign Up';
+                emailGroup.style.display = 'block';
+                roleGroup.style.display = 'block';
+                togglePText.innerHTML = `Already have an account? <span id="toggle-action" style="color: #a5b4fc; cursor: pointer; font-weight: 600;">Sign in</span>`;
+            }
+            // reattach listener
+            document.getElementById('toggle-action').addEventListener('click', arguments.callee);
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            msgDiv.textContent = 'Processing...';
+            msgDiv.style.color = '#a5b4fc';
+
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+
+            const payload = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            let endpoint = '/api/v1/auth/login';
+
+            if (!isLogin) {
+                payload.email = document.getElementById('email').value;
+                payload.role = document.getElementById('role').value;
+                endpoint = '/api/v1/auth/register';
+            }
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || data.username || data.email || Object.values(data)[0] || 'Authentication failed');
+                }
+
+                if (isLogin) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    localStorage.setItem('role', data.role);
+
+                    msgDiv.style.color = '#34d399';
+                    msgDiv.textContent = 'Success! Redirecting...';
+
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 500);
+                } else {
+                    msgDiv.style.color = '#34d399';
+                    msgDiv.textContent = 'Registration successful! Please sign in.';
+                    // Switch back to login
+                    document.getElementById('toggle-action').click();
+                }
+
+            } catch (err) {
+                msgDiv.style.color = 'var(--error)';
+                msgDiv.textContent = err.message;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+            }
+        });
+
+        // check if already logged in
+        if (localStorage.getItem('accessToken')) {
+            window.location.href = '/dashboard.html';
+        }
+    </script>
+</body>
+
+</html>

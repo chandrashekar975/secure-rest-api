@@ -1,0 +1,55 @@
+package com.company.secureapi.audit;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+public class ApiLoggingFilter extends OncePerRequestFilter {
+
+    private final ApiLogRepository apiLogRepository;
+
+    public ApiLoggingFilter(ApiLogRepository apiLogRepository) {
+        this.apiLogRepository = apiLogRepository;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
+        // First proceed with request execution
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            // After request is processed, log the details
+            logRequestInfo(request, response);
+        }
+    }
+
+    private void logRequestInfo(HttpServletRequest request, HttpServletResponse response) {
+        String username = "ANONYMOUS";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            username = auth.getName();
+        }
+
+        String endpoint = request.getRequestURI();
+        String method = request.getMethod();
+        int status = response.getStatus();
+        
+        String ipAddress = request.getHeader("X-Forwarded-For");
+        if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+        }
+
+        // Run asynchronously or directly save
+        ApiLog log = new ApiLog(username, endpoint, method, status, ipAddress);
+        apiLogRepository.save(log);
+    }
+}

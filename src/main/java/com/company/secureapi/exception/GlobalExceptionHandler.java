@@ -25,7 +25,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Email already exists"));
     }
 
-
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentials() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -43,5 +42,17 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("Access Denied: You don't have permission to perform this action"));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse("An internal error occurred: " + ex.getMessage()));
     }
 }
