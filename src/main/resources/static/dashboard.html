@@ -9,21 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a1a;
-            --surface: #141425;
-            --surface-hover: #1e1e38;
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --accent: #06b6d4;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border: #1e1e38;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #f43f5e;
+            --bg: #f5f0e8;
+            --surface: #ffffff;
+            --surface-hover: #f0ebe3;
+            --primary: #2d6a4f;
+            --primary-hover: #1b4332;
+            --accent: #52b788;
+            --text-main: #1b1b1b;
+            --text-muted: #6b7280;
+            --border: #d6cfc4;
+            --success: #059669;
+            --warning: #d97706;
+            --error: #dc2626;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -50,7 +52,7 @@
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 12px;
-            background: linear-gradient(to right, #c4b5fd, #67e8f9);
+            background: linear-gradient(to right, #2d6a4f, #52b788);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -63,6 +65,7 @@
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
+
         .user-info strong {
             color: var(--text-main);
             font-weight: 600;
@@ -83,7 +86,8 @@
             position: relative;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-item:hover,
+        .nav-item.active {
             background-color: var(--surface-hover);
             color: var(--text-main);
         }
@@ -91,7 +95,7 @@
         .nav-section-title {
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
+            color: #9ca3af;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             padding: 16px 16px 6px;
@@ -110,12 +114,15 @@
             text-align: center;
         }
 
-        .flex-spacer { flex-grow: 1; }
+        .flex-spacer {
+            flex-grow: 1;
+        }
 
         .logout-btn {
             background: rgba(239, 68, 68, 0.1);
             color: var(--error);
         }
+
         .logout-btn:hover {
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
@@ -141,6 +148,7 @@
             margin: 0;
             font-size: 26px;
         }
+
         header p {
             margin: 4px 0 0 0;
             color: var(--text-muted);
@@ -154,20 +162,23 @@
             font-weight: 600;
             border: 1px solid;
         }
+
         .role-ADMIN {
-            background: rgba(16, 185, 129, 0.15);
-            color: #6ee7b7;
-            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(5, 150, 105, 0.12);
+            color: #059669;
+            border-color: rgba(5, 150, 105, 0.3);
         }
+
         .role-EMPLOYEE {
-            background: rgba(59, 130, 246, 0.15);
-            color: #93c5fd;
-            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, 0.25);
         }
+
         .role-AUDITOR {
-            background: rgba(245, 158, 11, 0.15);
-            color: #fcd34d;
-            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(217, 119, 6, 0.1);
+            color: #b45309;
+            border-color: rgba(217, 119, 6, 0.25);
         }
 
         /* Dashboard Cards */
@@ -195,11 +206,13 @@
             padding: 22px;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
             border-color: #475569;
         }
+
         .card h3 {
             margin: 0 0 8px 0;
             font-size: 16px;
@@ -207,6 +220,7 @@
             align-items: center;
             gap: 8px;
         }
+
         .card p {
             color: var(--text-muted);
             font-size: 13px;
@@ -229,24 +243,39 @@
             padding: 18px;
             text-align: center;
         }
+
         .stat-card .stat-value {
             font-size: 32px;
             font-weight: 700;
             margin: 4px 0;
         }
+
         .stat-card .stat-label {
             font-size: 12px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
+
         .stat-card .stat-icon {
             font-size: 20px;
         }
-        .stat-value.text-blue { color: #60a5fa; }
-        .stat-value.text-green { color: #34d399; }
-        .stat-value.text-red { color: #f87171; }
-        .stat-value.text-yellow { color: #fbbf24; }
+
+        .stat-value.text-blue {
+            color: #2563eb;
+        }
+
+        .stat-value.text-green {
+            color: #059669;
+        }
+
+        .stat-value.text-red {
+            color: #dc2626;
+        }
+
+        .stat-value.text-yellow {
+            color: #b45309;
+        }
 
         /* Alert List */
         .alert-list {
@@ -266,9 +295,11 @@
             gap: 14px;
             transition: border-color 0.2s;
         }
+
         .alert-item:hover {
             border-color: #475569;
         }
+
         .alert-item.resolved {
             opacity: 0.5;
         }
@@ -281,12 +312,30 @@
             margin-top: 6px;
             flex-shrink: 0;
         }
-        .sev-CRITICAL { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.5); }
-        .sev-HIGH { background: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.4); }
-        .sev-MEDIUM { background: #eab308; box-shadow: 0 0 8px rgba(234, 179, 8, 0.4); }
-        .sev-LOW { background: #3b82f6; }
 
-        .alert-body { flex-grow: 1; }
+        .sev-CRITICAL {
+            background: #dc2626;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.35);
+        }
+
+        .sev-HIGH {
+            background: #ea580c;
+            box-shadow: 0 0 8px rgba(234, 88, 12, 0.3);
+        }
+
+        .sev-MEDIUM {
+            background: #d97706;
+            box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
+        }
+
+        .sev-LOW {
+            background: #2563eb;
+        }
+
+        .alert-body {
+            flex-grow: 1;
+        }
+
         .alert-body .alert-type {
             font-size: 12px;
             font-weight: 600;
@@ -294,26 +343,39 @@
             letter-spacing: 0.04em;
             margin-bottom: 3px;
         }
-        .alert-type-CRITICAL { color: #f87171; }
-        .alert-type-HIGH { color: #fb923c; }
-        .alert-type-MEDIUM { color: #fbbf24; }
-        .alert-type-LOW { color: #60a5fa; }
+
+        .alert-type-CRITICAL {
+            color: #dc2626;
+        }
+
+        .alert-type-HIGH {
+            color: #ea580c;
+        }
+
+        .alert-type-MEDIUM {
+            color: #b45309;
+        }
+
+        .alert-type-LOW {
+            color: #2563eb;
+        }
 
         .alert-body .alert-msg {
             font-size: 13px;
             color: var(--text-main);
             line-height: 1.4;
         }
+
         .alert-body .alert-meta {
             font-size: 11px;
-            color: #64748b;
+            color: #9ca3af;
             margin-top: 4px;
         }
 
         .alert-resolve-btn {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+            border: 1px solid rgba(5, 150, 105, 0.25);
             padding: 5px 12px;
             border-radius: 6px;
             font-size: 11px;
@@ -323,14 +385,15 @@
             white-space: nowrap;
             transition: all 0.2s;
         }
+
         .alert-resolve-btn:hover {
-            background: rgba(16, 185, 129, 0.3);
+            background: rgba(5, 150, 105, 0.2);
         }
 
         .empty-state {
             text-align: center;
             padding: 40px;
-            color: #64748b;
+            color: #9ca3af;
             font-size: 14px;
         }
 
@@ -348,30 +411,54 @@
             transition: all 0.2s;
             width: 100%;
         }
-        .btn:hover { background: var(--primary-hover); }
-        .btn:active { transform: scale(0.97); }
 
-        .btn-green { background: #059669; }
-        .btn-green:hover { background: #047857; }
+        .btn:hover {
+            background: var(--primary-hover);
+        }
 
-        .btn-orange { background: #ea580c; }
-        .btn-orange:hover { background: #c2410c; }
+        .btn:active {
+            transform: scale(0.97);
+        }
 
-        .btn-red { background: #dc2626; }
-        .btn-red:hover { background: #b91c1c; }
+        .btn-green {
+            background: #059669;
+        }
+
+        .btn-green:hover {
+            background: #047857;
+        }
+
+        .btn-orange {
+            background: #ea580c;
+        }
+
+        .btn-orange:hover {
+            background: #c2410c;
+        }
+
+        .btn-red {
+            background: #dc2626;
+        }
+
+        .btn-red:hover {
+            background: #b91c1c;
+        }
 
         .btn-secondary {
             background: var(--surface-hover);
             border: 1px solid var(--border);
         }
-        .btn-secondary:hover { background: #475569; }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
 
         /* Input inside cards */
         .card-input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.03);
             border: 1px solid var(--border);
-            color: white;
+            color: var(--text-main);
             padding: 8px 12px;
             border-radius: 8px;
             font-family: inherit;
@@ -380,6 +467,7 @@
             margin-bottom: 10px;
             box-sizing: border-box;
         }
+
         .card-input:focus {
             border-color: var(--primary);
         }
@@ -388,16 +476,19 @@
         .terminal-container {
             margin-top: 24px;
         }
+
         .terminal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
+
         .terminal-header h3 {
             margin: 0;
             font-size: 15px;
         }
+
         .terminal-clear {
             font-size: 12px;
             color: var(--text-muted);
@@ -408,36 +499,64 @@
             background: transparent;
             font-family: inherit;
         }
+
         .terminal-clear:hover {
             background: var(--surface-hover);
             color: var(--text-main);
         }
 
         .terminal {
-            background: #000;
+            background: #1a1a2e;
             border-radius: 12px;
             padding: 16px;
             font-family: 'Courier New', monospace;
             font-size: 12px;
-            color: #34d399;
+            color: #52b788;
             height: 280px;
             overflow-y: auto;
             border: 1px solid var(--border);
             line-height: 1.6;
         }
-        .terminal .t-error { color: var(--error); }
-        .terminal .t-warn { color: var(--warning); }
-        .terminal .t-info { color: #60a5fa; }
-        .terminal .t-success { color: #34d399; }
-        .terminal .t-time { color: #64748b; }
 
-        .hidden { display: none !important; }
+        .terminal .t-error {
+            color: var(--error);
+        }
+
+        .terminal .t-warn {
+            color: var(--warning);
+        }
+
+        .terminal .t-info {
+            color: #60a5fa;
+        }
+
+        .terminal .t-success {
+            color: #34d399;
+        }
+
+        .terminal .t-time {
+            color: #64748b;
+        }
+
+        .hidden {
+            display: none !important;
+        }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
-        .pulse { animation: pulse 2s ease-in-out infinite; }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
     </style>
 </head>
 
@@ -492,13 +611,13 @@
                 <div class="card">
                     <h3>🔄 Token Refresh</h3>
                     <p>Simulate an expired access token and renew it using your refresh token.</p>
-                    <button class="btn btn-secondary" onclick="refreshToken()">Force Refresh</button>
+                    <button class="btn" onclick="refreshToken()">Force Refresh</button>
                 </div>
 
                 <div class="card">
                     <h3>🚦 Rate Limit Test</h3>
                     <p>Fire rapid requests to trigger Bucket4j's 429 Too Many Requests.</p>
-                    <button class="btn btn-secondary" onclick="spamApi()">Spam 25 Requests</button>
+                    <button class="btn" onclick="spamApi()">Spam 25 Requests</button>
                 </div>
             </div>
 
@@ -507,7 +626,8 @@
                 <div class="card">
                     <h3>🛡️ Admin: List Users</h3>
                     <p>Only ADMIN role can access this. Others get 403 Forbidden.</p>
-                    <button class="btn btn-green" onclick="callApi('GET', '/api/v1/admin/users')">GET /api/v1/admin/users</button>
+                    <button class="btn btn-green" onclick="callApi('GET', '/api/v1/admin/users')">GET
+                        /api/v1/admin/users</button>
                 </div>
 
                 <div class="card">
@@ -547,6 +667,13 @@
                     <input type="number" class="card-input" id="block-user-id" placeholder="Enter User ID">
                     <button class="btn btn-orange" onclick="blockUser()">Block User</button>
                 </div>
+
+                <div class="card">
+                    <h3>🔓 Unblock User</h3>
+                    <p>Reactivate a blocked user account by ID.</p>
+                    <input type="number" class="card-input" id="unblock-user-id" placeholder="Enter User ID">
+                    <button class="btn btn-green" onclick="unblockUser()">Unblock User</button>
+                </div>
             </div>
         </div>
 
@@ -563,7 +690,8 @@
                 <div class="card">
                     <h3>⚠️ Suspicious Activity</h3>
                     <p>View requests with 4xx/5xx status codes — failed auth, forbidden, errors.</p>
-                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/suspicious')">Fetch Suspicious Logs</button>
+                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/suspicious')">Fetch Suspicious
+                        Logs</button>
                 </div>
             </div>
         </div>
@@ -584,7 +712,7 @@
                 <div class="card">
                     <h3>📦 All Alerts (History)</h3>
                     <p>View all alerts including resolved ones — full audit trail.</p>
-                    <button class="btn btn-secondary" onclick="loadAlerts(true)">All Alerts</button>
+                    <button class="btn btn-gray" onclick="loadAlerts(true)">All Alerts</button>
                 </div>
             </div>
 
@@ -624,26 +752,34 @@
                 <div class="card">
                     <h3>🔴 Rule 1: Brute Force</h3>
                     <p><strong>IF</strong> 5+ failed logins (401) from same IP in 5 minutes<br>
-                       <strong>THEN</strong> raise <span style="color:#f87171;">CRITICAL</span> alert</p>
-                    <button class="btn btn-secondary" onclick="callApi('GET', '/api/v1/logs/stats')">Refresh Stats</button>
+                        <strong>THEN</strong> raise <span style="color:#f87171;">CRITICAL</span> alert
+                    </p>
+                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/stats')">Refresh
+                        Stats</button>
                 </div>
                 <div class="card">
                     <h3>🟠 Rule 2: Privilege Escalation</h3>
                     <p><strong>IF</strong> 5+ forbidden (403) from same user in 5 minutes<br>
-                       <strong>THEN</strong> raise <span style="color:#fb923c;">HIGH</span> alert</p>
-                    <button class="btn btn-secondary" onclick="callApi('GET', '/api/v1/logs/alerts/active')">View Active Alerts</button>
+                        <strong>THEN</strong> raise <span style="color:#fb923c;">HIGH</span> alert
+                    </p>
+                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/alerts/active')">View Active
+                        Alerts</button>
                 </div>
                 <div class="card">
                     <h3>🟡 Rule 3: Rapid Access</h3>
                     <p><strong>IF</strong> 25+ requests from same IP in 1 minute<br>
-                       <strong>THEN</strong> raise <span style="color:#fbbf24;">MEDIUM</span> alert</p>
-                    <button class="btn btn-secondary" onclick="callApi('GET', '/api/v1/logs/alerts/count')">Alert Count</button>
+                        <strong>THEN</strong> raise <span style="color:#fbbf24;">MEDIUM</span> alert
+                    </p>
+                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/alerts/count')">Alert
+                        Count</button>
                 </div>
                 <div class="card">
                     <h3>🔴 Rule 4: Blocked User</h3>
                     <p><strong>IF</strong> blocked user attempts to login<br>
-                       <strong>THEN</strong> raise <span style="color:#fb923c;">HIGH</span> alert</p>
-                    <button class="btn btn-secondary" onclick="callApi('GET', '/api/v1/logs/alerts')">All Alerts</button>
+                        <strong>THEN</strong> raise <span style="color:#fb923c;">HIGH</span> alert
+                    </p>
+                    <button class="btn btn-red" onclick="callApi('GET', '/api/v1/logs/alerts')">All
+                        Alerts</button>
                 </div>
             </div>
         </div>
@@ -840,6 +976,12 @@
             const id = document.getElementById('block-user-id').value;
             if (!id) { log('Please enter a User ID to block.', 'warn'); return; }
             callApi('PUT', `/api/v1/admin/block/${id}`);
+        }
+
+        function unblockUser() {
+            const id = document.getElementById('unblock-user-id').value;
+            if (!id) { log('Please enter a User ID to unblock.', 'warn'); return; }
+            callApi('PUT', `/api/v1/admin/unblock/${id}`);
         }
 
         // ===== RATE LIMIT TEST =====

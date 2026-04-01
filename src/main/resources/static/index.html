@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0d1117 100%);
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --primary: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --primary-glow: rgba(139, 92, 246, 0.35);
-            --text-main: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --error: #f43f5e;
-            --success: #10b981;
-            --warning: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #f5f0e8 0%, #e8f5e9 50%, #f0ebe3 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --primary: #2d6a4f;
+            --primary-hover: #1b4332;
+            --primary-glow: rgba(45, 106, 79, 0.25);
+            --text-main: #1b1b1b;
+            --text-secondary: #6b7280;
+            --error: #dc2626;
+            --success: #059669;
+            --warning: #d97706;
         }
 
         body, html {
@@ -38,29 +38,29 @@
             position: absolute;
             filter: blur(100px);
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.3;
             animation: float 12s infinite ease-in-out alternate;
         }
         .blob-1 {
             width: 450px; height: 450px;
-            background: radial-gradient(circle, #7c3aed, #3b0764);
+            background: radial-gradient(circle, #86efac, #bbf7d0);
             top: -120px; left: -120px;
             border-radius: 50%;
         }
         .blob-2 {
             width: 380px; height: 380px;
-            background: radial-gradient(circle, #06b6d4, #0e7490);
+            background: radial-gradient(circle, #fde68a, #fef3c7);
             bottom: -80px; right: -80px;
             border-radius: 50%;
             animation-delay: -6s;
         }
         .blob-3 {
             width: 200px; height: 200px;
-            background: radial-gradient(circle, #f43f5e, #9f1239);
+            background: radial-gradient(circle, #a7f3d0, #d1fae5);
             top: 50%; right: 20%;
             border-radius: 50%;
             animation-delay: -3s;
-            opacity: 0.2;
+            opacity: 0.25;
         }
 
         @keyframes float {
@@ -77,8 +77,8 @@
             padding: 40px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.6),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
             transition: transform 0.3s ease;
         }
         .glass-panel:hover {
@@ -95,7 +95,7 @@
             margin-top: 0;
             font-weight: 700;
             font-size: 26px;
-            background: linear-gradient(135deg, #c4b5fd, #67e8f9);
+            background: linear-gradient(135deg, #2d6a4f, #52b788);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -125,9 +125,9 @@
 
         .form-control {
             width: 100%;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: white;
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #1b1b1b;
             padding: 12px 16px;
             border-radius: 12px;
             font-family: 'Inter', sans-serif;
@@ -142,7 +142,7 @@
         }
         .form-control.invalid {
             border-color: var(--error);
-            box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
         }
 
         .field-error {
@@ -154,7 +154,7 @@
 
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, var(--primary), #6d28d9);
+            background: linear-gradient(135deg, var(--primary), #40916c);
             color: white;
             border: none;
             padding: 14px;
@@ -168,7 +168,7 @@
             letter-spacing: 0.01em;
         }
         .btn:hover {
-            background: linear-gradient(135deg, var(--primary-hover), #5b21b6);
+            background: linear-gradient(135deg, var(--primary-hover), #2d6a4f);
             box-shadow: 0 8px 24px -4px var(--primary-glow);
             transform: translateY(-1px);
         }
@@ -187,13 +187,13 @@
             color: var(--text-secondary);
         }
         .toggle-link {
-            color: #c4b5fd;
+            color: #2d6a4f;
             cursor: pointer;
             font-weight: 600;
             transition: color 0.2s;
         }
         .toggle-link:hover {
-            color: #e9d5ff;
+            color: #1b4332;
             text-decoration: underline;
         }
 
@@ -208,17 +208,17 @@
         .hidden { display: none !important; }
 
         select.form-control {
-            background: rgba(0, 0, 0, 0.35);
-            color: white;
+            background: rgba(0, 0, 0, 0.03);
+            color: #1b1b1b;
         }
         select.form-control option {
-            background: #1e1b4b;
-            color: white;
+            background: #ffffff;
+            color: #1b1b1b;
         }
 
         .password-hint {
             font-size: 11px;
-            color: #64748b;
+            color: #9ca3af;
             margin-top: 4px;
         }
     </style>
@@ -441,7 +441,7 @@
             if (!isValid) return;
 
             msgDiv.textContent = 'Processing...';
-            msgDiv.style.color = '#c4b5fd';
+            msgDiv.style.color = '#2d6a4f';
             submitBtn.disabled = true;
 
             const payload = {

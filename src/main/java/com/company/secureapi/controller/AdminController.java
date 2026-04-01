@@ -45,4 +45,16 @@ public class AdminController {
                 "accountStatus", user.getAccountStatus().name()
         ));
     }
+
+    // ADMIN ONLY: Unblock a user account
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/unblock/{id}")
+    public ResponseEntity<Map<String, Object>> unblockUser(@PathVariable Long id) {
+        User user = userService.unblockUser(id);
+        return ResponseEntity.ok(Map.of(
+                "message", "User unblocked successfully",
+                "username", user.getUsername(),
+                "accountStatus", user.getAccountStatus().name()
+        ));
+    }
 }

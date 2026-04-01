@@ -181,4 +181,12 @@ public class UserService {
         user.setAccountStatus(AccountStatus.BLOCKED);
         return userRepository.save(user);
     }
+
+    @Transactional
+    public User unblockUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        user.setAccountStatus(AccountStatus.ACTIVE);
+        return userRepository.save(user);
+    }
 }
