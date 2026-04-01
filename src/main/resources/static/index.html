@@ -9,19 +9,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --text-main: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --error: #ef4444;
-            --success: #34d399;
+            --bg-gradient: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0d1117 100%);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --primary-glow: rgba(139, 92, 246, 0.35);
+            --text-main: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --error: #f43f5e;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
 
-        body,
-        html {
+        body, html {
             height: 100%;
             margin: 0;
             font-family: 'Inter', sans-serif;
@@ -35,162 +36,190 @@
 
         .blob {
             position: absolute;
-            filter: blur(80px);
+            filter: blur(100px);
             z-index: -1;
-            opacity: 0.5;
-            animation: float 10s infinite ease-in-out alternate;
+            opacity: 0.4;
+            animation: float 12s infinite ease-in-out alternate;
         }
-
         .blob-1 {
-            width: 400px;
-            height: 400px;
-            background: #4f46e5;
-            top: -100px;
-            left: -100px;
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, #7c3aed, #3b0764);
+            top: -120px; left: -120px;
             border-radius: 50%;
         }
-
         .blob-2 {
-            width: 350px;
-            height: 350px;
-            background: #e11d48;
-            bottom: -50px;
-            right: -50px;
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, #06b6d4, #0e7490);
+            bottom: -80px; right: -80px;
             border-radius: 50%;
-            animation-delay: -5s;
+            animation-delay: -6s;
+        }
+        .blob-3 {
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, #f43f5e, #9f1239);
+            top: 50%; right: 20%;
+            border-radius: 50%;
+            animation-delay: -3s;
+            opacity: 0.2;
         }
 
         @keyframes float {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
+            100% { transform: translate(40px, 40px) scale(1.08); }
         }
 
         .glass-panel {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 40px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 420px;
+            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
             transition: transform 0.3s ease;
         }
-
         .glass-panel:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+        }
+
+        .logo-icon {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 8px;
         }
 
         h2 {
             margin-top: 0;
             font-weight: 700;
-            font-size: 28px;
-            background: linear-gradient(to right, #a5b4fc, #c084fc);
+            font-size: 26px;
+            background: linear-gradient(135deg, #c4b5fd, #67e8f9);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             position: relative;
         }
 
         .form-group label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .form-control {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: white;
             padding: 12px 16px;
             border-radius: 12px;
             font-family: 'Inter', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             box-sizing: border-box;
         }
-
         .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        .form-control.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+        }
+
+        .field-error {
+            font-size: 11px;
+            color: var(--error);
+            margin-top: 4px;
+            min-height: 14px;
         }
 
         .btn {
             width: 100%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #6d28d9);
             color: white;
             border: none;
             padding: 14px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
-            transition: all 0.2s ease;
-            margin-top: 10px;
+            transition: all 0.25s ease;
+            margin-top: 8px;
+            letter-spacing: 0.01em;
         }
-
         .btn:hover {
-            background: var(--primary-hover);
-            transform: scale(1.02);
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, var(--primary-hover), #5b21b6);
+            box-shadow: 0 8px 24px -4px var(--primary-glow);
+            transform: translateY(-1px);
         }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
+        .btn:active { transform: scale(0.98); }
         .btn:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .toggle-text {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
         }
-
         .toggle-link {
-            color: #a5b4fc;
+            color: #c4b5fd;
             cursor: pointer;
             font-weight: 600;
+            transition: color 0.2s;
         }
-
         .toggle-link:hover {
+            color: #e9d5ff;
             text-decoration: underline;
         }
 
         #message {
-            margin-top: 15px;
+            margin-top: 14px;
             text-align: center;
-            font-size: 14px;
-            min-height: 20px;
+            font-size: 13px;
+            min-height: 18px;
+            font-weight: 500;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         select.form-control {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.35);
             color: white;
         }
         select.form-control option {
-            background: #1e293b;
+            background: #1e1b4b;
             color: white;
+        }
+
+        .password-hint {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
         }
     </style>
 </head>
@@ -199,24 +228,37 @@
 
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
 
     <div class="glass-panel">
+        <div class="logo-icon">🔐</div>
         <h2 id="form-title">Welcome Back</h2>
+        <p class="subtitle" id="form-subtitle">Sign in to your secure account</p>
 
-        <form id="auth-form">
+        <form id="auth-form" novalidate>
             <div class="form-group hidden" id="email-group">
                 <label for="email">Email address</label>
-                <input type="email" id="email" class="form-control" autocomplete="off">
+                <input type="email" id="email" class="form-control" placeholder="you@company.com" autocomplete="off">
+                <div class="field-error" id="email-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" class="form-control" required autocomplete="off">
+                <input type="text" id="username" class="form-control" placeholder="Enter username" autocomplete="off">
+                <div class="field-error" id="username-error"></div>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" class="form-control" required autocomplete="current-password">
+                <input type="password" id="password" class="form-control" placeholder="Enter password" autocomplete="current-password">
+                <div class="field-error" id="password-error"></div>
+                <div class="password-hint hidden" id="password-hint">Min 6 chars, 1 uppercase, 1 lowercase, 1 number</div>
+            </div>
+
+            <div class="form-group hidden" id="confirm-password-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" class="form-control" placeholder="Re-enter password" autocomplete="off">
+                <div class="field-error" id="confirm-password-error"></div>
             </div>
 
             <div class="form-group hidden" id="role-group">
@@ -241,9 +283,12 @@
         let isLogin = true;
 
         const formTitle = document.getElementById('form-title');
+        const formSubtitle = document.getElementById('form-subtitle');
         const submitBtn = document.getElementById('submit-btn');
         const emailGroup = document.getElementById('email-group');
         const roleGroup = document.getElementById('role-group');
+        const confirmPwGroup = document.getElementById('confirm-password-group');
+        const passwordHint = document.getElementById('password-hint');
         const form = document.getElementById('auth-form');
         const msgDiv = document.getElementById('message');
         const toggleContainer = document.getElementById('toggle-container');
@@ -254,20 +299,27 @@
 
         function toggleMode() {
             isLogin = !isLogin;
+            clearAllErrors();
             msgDiv.textContent = '';
             msgDiv.style.color = '';
 
             if (isLogin) {
                 formTitle.textContent = 'Welcome Back';
+                formSubtitle.textContent = 'Sign in to your secure account';
                 submitBtn.textContent = 'Sign In';
                 emailGroup.classList.add('hidden');
                 roleGroup.classList.add('hidden');
+                confirmPwGroup.classList.add('hidden');
+                passwordHint.classList.add('hidden');
                 toggleContainer.innerHTML = `Don't have an account? <span class="toggle-link" id="toggle-action">Sign up</span>`;
             } else {
                 formTitle.textContent = 'Create Account';
+                formSubtitle.textContent = 'Register a new secure account';
                 submitBtn.textContent = 'Sign Up';
                 emailGroup.classList.remove('hidden');
                 roleGroup.classList.remove('hidden');
+                confirmPwGroup.classList.remove('hidden');
+                passwordHint.classList.remove('hidden');
                 toggleContainer.innerHTML = `Already have an account? <span class="toggle-link" id="toggle-action">Sign in</span>`;
             }
             attachToggle();
@@ -275,10 +327,121 @@
 
         attachToggle();
 
+        // ===== VALIDATION =====
+        function clearAllErrors() {
+            document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+            document.querySelectorAll('.form-control').forEach(el => el.classList.remove('invalid'));
+        }
+
+        function setError(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + '-error');
+            if (input) input.classList.add('invalid');
+            if (errorDiv) errorDiv.textContent = message;
+        }
+
+        function validateLogin() {
+            let valid = true;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username) {
+                setError('username', 'Username is required');
+                valid = false;
+            } else if (username.length < 3) {
+                setError('username', 'Username must be at least 3 characters');
+                valid = false;
+            }
+
+            if (!password) {
+                setError('password', 'Password is required');
+                valid = false;
+            } else if (password.length < 4) {
+                setError('password', 'Password must be at least 4 characters');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        function validateRegister() {
+            let valid = true;
+            const email = document.getElementById('email').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPw = document.getElementById('confirm-password').value;
+
+            // Email
+            if (!email) {
+                setError('email', 'Email is required');
+                valid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                setError('email', 'Enter a valid email address');
+                valid = false;
+            }
+
+            // Username
+            if (!username) {
+                setError('username', 'Username is required');
+                valid = false;
+            } else if (username.length < 3) {
+                setError('username', 'Username must be at least 3 characters');
+                valid = false;
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                setError('username', 'Only letters, numbers, and underscores');
+                valid = false;
+            }
+
+            // Password strength
+            if (!password) {
+                setError('password', 'Password is required');
+                valid = false;
+            } else if (password.length < 6) {
+                setError('password', 'Password must be at least 6 characters');
+                valid = false;
+            } else if (!/[A-Z]/.test(password)) {
+                setError('password', 'Must contain at least 1 uppercase letter');
+                valid = false;
+            } else if (!/[a-z]/.test(password)) {
+                setError('password', 'Must contain at least 1 lowercase letter');
+                valid = false;
+            } else if (!/[0-9]/.test(password)) {
+                setError('password', 'Must contain at least 1 number');
+                valid = false;
+            }
+
+            // Confirm password
+            if (!confirmPw) {
+                setError('confirm-password', 'Please confirm your password');
+                valid = false;
+            } else if (password !== confirmPw) {
+                setError('confirm-password', 'Passwords do not match');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        // Clear field error on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', () => {
+                input.classList.remove('invalid');
+                const errorDiv = document.getElementById(input.id + '-error');
+                if (errorDiv) errorDiv.textContent = '';
+            });
+        });
+
+        // ===== FORM SUBMIT =====
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            clearAllErrors();
+
+            // Validate
+            const isValid = isLogin ? validateLogin() : validateRegister();
+            if (!isValid) return;
+
             msgDiv.textContent = 'Processing...';
-            msgDiv.style.color = '#a5b4fc';
+            msgDiv.style.color = '#c4b5fd';
             submitBtn.disabled = true;
 
             const payload = {
@@ -304,14 +467,12 @@
                 const data = await res.json();
 
                 if (!res.ok) {
-                    // Extract error message from various response formats
                     const errMsg = data.message || data.error ||
                         (typeof data === 'object' ? Object.values(data)[0] : 'Request failed');
                     throw new Error(errMsg);
                 }
 
                 if (isLogin) {
-                    // Store tokens and user info
                     localStorage.setItem('accessToken', data.accessToken);
                     localStorage.setItem('refreshToken', data.refreshToken);
                     localStorage.setItem('role', data.role);
@@ -326,7 +487,6 @@
                 } else {
                     msgDiv.style.color = 'var(--success)';
                     msgDiv.textContent = `Registered as ${data.role}! Please sign in.`;
-                    // Switch back to login mode after short delay
                     setTimeout(() => {
                         if (!isLogin) toggleMode();
                     }, 1500);

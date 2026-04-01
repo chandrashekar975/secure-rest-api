@@ -13,9 +13,11 @@ import java.io.IOException;
 public class ApiLoggingFilter extends OncePerRequestFilter {
 
     private final ApiLogRepository apiLogRepository;
+    private final AuditRuleEngine auditRuleEngine;
 
-    public ApiLoggingFilter(ApiLogRepository apiLogRepository) {
+    public ApiLoggingFilter(ApiLogRepository apiLogRepository, AuditRuleEngine auditRuleEngine) {
         this.apiLogRepository = apiLogRepository;
+        this.auditRuleEngine = auditRuleEngine;
     }
 
     @Override
@@ -27,12 +29,12 @@ public class ApiLoggingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } finally {
-            // After request is processed, log the details
-            logRequestInfo(request, response);
+            // After request is processed, log and evaluate rules
+            logAndEvaluate(request, response);
         }
     }
 
-    private void logRequestInfo(HttpServletRequest request, HttpServletResponse response) {
+    private void logAndEvaluate(HttpServletRequest request, HttpServletResponse response) {
         String username = "ANONYMOUS";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
@@ -42,14 +44,19 @@ public class ApiLoggingFilter extends OncePerRequestFilter {
         String endpoint = request.getRequestURI();
         String method = request.getMethod();
         int status = response.getStatus();
-        
+
         String ipAddress = request.getHeader("X-Forwarded-For");
         if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
         }
 
-        // Run asynchronously or directly save
+        // Save the log entry
         ApiLog log = new ApiLog(username, endpoint, method, status, ipAddress);
         apiLogRepository.save(log);
+
+        // Evaluate security rules against this log entry
+        if (auditRuleEngine != null) {
+            auditRuleEngine.evaluate(log);
+        }
     }
 }

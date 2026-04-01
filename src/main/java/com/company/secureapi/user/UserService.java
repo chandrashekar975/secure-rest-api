@@ -1,5 +1,6 @@
 package com.company.secureapi.user;
 
+import com.company.secureapi.audit.AuditRuleEngine;
 import com.company.secureapi.auth.LoginRequest;
 import com.company.secureapi.auth.LoginResponse;
 import com.company.secureapi.auth.RegisterRequest;
@@ -28,19 +29,22 @@ public class UserService {
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
+    private final AuditRuleEngine auditRuleEngine;
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager,
                        JwtService jwtService,
                        RefreshTokenService refreshTokenService,
-                       RefreshTokenRepository refreshTokenRepository) {
+                       RefreshTokenRepository refreshTokenRepository,
+                       AuditRuleEngine auditRuleEngine) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.auditRuleEngine = auditRuleEngine;
     }
 
     public void createAdminIfNotExists() {
@@ -107,6 +111,11 @@ public class UserService {
                 .orElseThrow(InvalidCredentialsException::new);
 
         if (user.getAccountStatus() != AccountStatus.ACTIVE) {
+            // RULE 4: Raise alert when blocked user tries to login
+            auditRuleEngine.raiseBlockedUserAlert(
+                    user.getUsername(),
+                    "Account status: " + user.getAccountStatus().name()
+            );
             throw new InvalidCredentialsException();
         }
 

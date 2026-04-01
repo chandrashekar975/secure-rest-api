@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.company.secureapi.security.RateLimitingFilter;
 import com.company.secureapi.audit.ApiLoggingFilter;
 import com.company.secureapi.audit.ApiLogRepository;
+import com.company.secureapi.audit.AuditRuleEngine;
 
 
 @Configuration
@@ -28,17 +29,20 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final RateLimitingFilter rateLimitingFilter;
     private final ApiLogRepository apiLogRepository;
+    private final AuditRuleEngine auditRuleEngine;
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter,
                           CustomAuthenticationEntryPoint authenticationEntryPoint,
                           CustomAccessDeniedHandler accessDeniedHandler,
                           RateLimitingFilter rateLimitingFilter,
-                          ApiLogRepository apiLogRepository) {
+                          ApiLogRepository apiLogRepository,
+                          AuditRuleEngine auditRuleEngine) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
         this.rateLimitingFilter = rateLimitingFilter;
         this.apiLogRepository = apiLogRepository;
+        this.auditRuleEngine = auditRuleEngine;
     }
 
     @Bean
@@ -75,11 +79,13 @@ public class SecurityConfig {
                                 // Everything else requires authentication
                                 .anyRequest().authenticated()
                 )
+                // FIX: ApiLoggingFilter is now OUTERMOST — runs BEFORE rate limiter
+                // so it captures ALL requests including 429 rate-limited ones
+                .addFilterBefore(new ApiLoggingFilter(apiLogRepository, auditRuleEngine),
+                        UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(rateLimitingFilter,
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new ApiLoggingFilter(apiLogRepository),
                         UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
