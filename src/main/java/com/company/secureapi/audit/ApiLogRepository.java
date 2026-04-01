@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface ApiLogRepository extends JpaRepository<ApiLog, Long> {
     List<ApiLog> findAllByOrderByTimestampDesc();
+    List<ApiLog> findByStatusCodeGreaterThanEqualOrderByTimestampDesc(int statusCode);
 }

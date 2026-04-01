@@ -59,7 +59,20 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth ->
                         auth
+                                // Public: static resources
+                                .requestMatchers(
+                                        "/", "/index.html", "/dashboard.html",
+                                        "/*.html", "/*.css", "/*.js",
+                                        "/css/**", "/js/**", "/images/**",
+                                        "/favicon.ico"
+                                ).permitAll()
+                                // Public: auth endpoints
                                 .requestMatchers("/api/v1/auth/**").permitAll()
+                                // ADMIN only
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                // AUDITOR only
+                                .requestMatchers("/api/v1/logs/**").hasRole("AUDITOR")
+                                // Everything else requires authentication
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(rateLimitingFilter,

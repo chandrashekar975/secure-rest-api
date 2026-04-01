@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure API Access</title>
+    <title>Secure API — Login</title>
+    <meta name="description" content="Enterprise-Grade Secure REST API System with Authentication, Authorization, and Token Management">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,6 +17,7 @@
             --text-main: #f8fafc;
             --text-secondary: #cbd5e1;
             --error: #ef4444;
+            --success: #34d399;
         }
 
         body,
@@ -31,7 +33,6 @@
             overflow: hidden;
         }
 
-        /* Animated background elements */
         .blob {
             position: absolute;
             filter: blur(80px);
@@ -60,13 +61,8 @@
         }
 
         @keyframes float {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            100% {
-                transform: translate(50px, 50px) scale(1.1);
-            }
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
         }
 
         .glass-panel {
@@ -154,6 +150,12 @@
             transform: scale(0.98);
         }
 
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .toggle-text {
             text-align: center;
             margin-top: 20px;
@@ -161,13 +163,13 @@
             color: var(--text-secondary);
         }
 
-        .toggle-text span {
+        .toggle-link {
             color: #a5b4fc;
             cursor: pointer;
             font-weight: 600;
         }
 
-        .toggle-text span:hover {
+        .toggle-link:hover {
             text-decoration: underline;
         }
 
@@ -176,11 +178,19 @@
             text-align: center;
             font-size: 14px;
             min-height: 20px;
-            color: var(--error);
         }
 
         .hidden {
-            display: none;
+            display: none !important;
+        }
+
+        select.form-control {
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+        select.form-control option {
+            background: #1e293b;
+            color: white;
         }
     </style>
 </head>
@@ -190,11 +200,11 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
 
-    <div class="glass-panel" id="login-panel">
+    <div class="glass-panel">
         <h2 id="form-title">Welcome Back</h2>
 
         <form id="auth-form">
-            <div class="form-group" id="email-group" class="hidden" style="display: none;">
+            <div class="form-group hidden" id="email-group">
                 <label for="email">Email address</label>
                 <input type="email" id="email" class="form-control" autocomplete="off">
             </div>
@@ -209,12 +219,11 @@
                 <input type="password" id="password" class="form-control" required autocomplete="current-password">
             </div>
 
-            <div class="form-group" id="role-group" style="display: none;">
+            <div class="form-group hidden" id="role-group">
                 <label for="role">Role</label>
-                <select id="role" class="form-control" style="background: rgba(0,0,0,0.4); color: white;">
-                    <option value="USER">USER</option>
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="AUDITOR">AUDITOR</option>
+                <select id="role" class="form-control">
+                    <option value="EMPLOYEE">EMPLOYEE (Standard User)</option>
+                    <option value="AUDITOR">AUDITOR (Log Viewer)</option>
                 </select>
             </div>
 
@@ -223,8 +232,8 @@
 
         <div id="message"></div>
 
-        <div class="toggle-text">
-            <span id="toggle-pText">Don't have an account? <span id="toggle-action">Sign up</span></span>
+        <div class="toggle-text" id="toggle-container">
+            Don't have an account? <span class="toggle-link" id="toggle-action">Sign up</span>
         </div>
     </div>
 
@@ -233,51 +242,54 @@
 
         const formTitle = document.getElementById('form-title');
         const submitBtn = document.getElementById('submit-btn');
-        const toggleAction = document.getElementById('toggle-action');
-        const togglePText = document.getElementById('toggle-pText');
         const emailGroup = document.getElementById('email-group');
         const roleGroup = document.getElementById('role-group');
         const form = document.getElementById('auth-form');
         const msgDiv = document.getElementById('message');
+        const toggleContainer = document.getElementById('toggle-container');
 
-        toggleAction.addEventListener('click', () => {
+        function attachToggle() {
+            document.getElementById('toggle-action').addEventListener('click', toggleMode);
+        }
+
+        function toggleMode() {
             isLogin = !isLogin;
             msgDiv.textContent = '';
+            msgDiv.style.color = '';
 
             if (isLogin) {
                 formTitle.textContent = 'Welcome Back';
                 submitBtn.textContent = 'Sign In';
-                emailGroup.style.display = 'none';
-                roleGroup.style.display = 'none';
-                togglePText.innerHTML = `Don't have an account? <span id="toggle-action" style="color: #a5b4fc; cursor: pointer; font-weight: 600;">Sign up</span>`;
+                emailGroup.classList.add('hidden');
+                roleGroup.classList.add('hidden');
+                toggleContainer.innerHTML = `Don't have an account? <span class="toggle-link" id="toggle-action">Sign up</span>`;
             } else {
                 formTitle.textContent = 'Create Account';
                 submitBtn.textContent = 'Sign Up';
-                emailGroup.style.display = 'block';
-                roleGroup.style.display = 'block';
-                togglePText.innerHTML = `Already have an account? <span id="toggle-action" style="color: #a5b4fc; cursor: pointer; font-weight: 600;">Sign in</span>`;
+                emailGroup.classList.remove('hidden');
+                roleGroup.classList.remove('hidden');
+                toggleContainer.innerHTML = `Already have an account? <span class="toggle-link" id="toggle-action">Sign in</span>`;
             }
-            // reattach listener
-            document.getElementById('toggle-action').addEventListener('click', arguments.callee);
-        });
+            attachToggle();
+        }
+
+        attachToggle();
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             msgDiv.textContent = 'Processing...';
             msgDiv.style.color = '#a5b4fc';
-
             submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.7';
 
             const payload = {
-                username: document.getElementById('username').value,
+                username: document.getElementById('username').value.trim(),
                 password: document.getElementById('password').value
             };
 
             let endpoint = '/api/v1/auth/login';
 
             if (!isLogin) {
-                payload.email = document.getElementById('email').value;
+                payload.email = document.getElementById('email').value.trim();
                 payload.role = document.getElementById('role').value;
                 endpoint = '/api/v1/auth/register';
             }
@@ -292,25 +304,32 @@
                 const data = await res.json();
 
                 if (!res.ok) {
-                    throw new Error(data.error || data.username || data.email || Object.values(data)[0] || 'Authentication failed');
+                    // Extract error message from various response formats
+                    const errMsg = data.message || data.error ||
+                        (typeof data === 'object' ? Object.values(data)[0] : 'Request failed');
+                    throw new Error(errMsg);
                 }
 
                 if (isLogin) {
+                    // Store tokens and user info
                     localStorage.setItem('accessToken', data.accessToken);
                     localStorage.setItem('refreshToken', data.refreshToken);
                     localStorage.setItem('role', data.role);
+                    localStorage.setItem('username', data.username);
 
-                    msgDiv.style.color = '#34d399';
-                    msgDiv.textContent = 'Success! Redirecting...';
+                    msgDiv.style.color = 'var(--success)';
+                    msgDiv.textContent = 'Login successful! Redirecting...';
 
                     setTimeout(() => {
                         window.location.href = '/dashboard.html';
-                    }, 500);
+                    }, 600);
                 } else {
-                    msgDiv.style.color = '#34d399';
-                    msgDiv.textContent = 'Registration successful! Please sign in.';
-                    // Switch back to login
-                    document.getElementById('toggle-action').click();
+                    msgDiv.style.color = 'var(--success)';
+                    msgDiv.textContent = `Registered as ${data.role}! Please sign in.`;
+                    // Switch back to login mode after short delay
+                    setTimeout(() => {
+                        if (!isLogin) toggleMode();
+                    }, 1500);
                 }
 
             } catch (err) {
@@ -318,11 +337,10 @@
                 msgDiv.textContent = err.message;
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.style.opacity = '1';
             }
         });
 
-        // check if already logged in
+        // Auto-redirect if already logged in
         if (localStorage.getItem('accessToken')) {
             window.location.href = '/dashboard.html';
         }

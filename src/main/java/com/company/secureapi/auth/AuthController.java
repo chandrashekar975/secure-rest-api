@@ -6,10 +6,13 @@ import com.company.secureapi.security.jwt.JwtService;
 import com.company.secureapi.user.User;
 import com.company.secureapi.user.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -26,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public RegisterResponse register(@Valid @RequestBody RegisterRequest request) {
-        var user = userService.createEmployee(request);
+        var user = userService.createUser(request);
 
         return new RegisterResponse(
                 user.getUsername(),
@@ -40,7 +43,6 @@ public class AuthController {
         return userService.authenticate(request);
     }
 
-    // 🔥 REFRESH API
     @PostMapping("/refresh")
     public LoginResponse refresh(@RequestParam String refreshToken) {
 
@@ -60,13 +62,12 @@ public class AuthController {
         );
     }
 
-    // 🔥 LOGOUT API
     @PostMapping("/logout")
-    public String logout(@RequestParam String refreshToken) {
+    public ResponseEntity<Map<String, String>> logout(@RequestParam String refreshToken) {
 
         RefreshToken rt = refreshTokenService.validateToken(refreshToken);
         refreshTokenService.deleteByUser(rt.getUser());
 
-        return "Logged out successfully";
+        return ResponseEntity.ok(Map.of("message", "Logged out successfully"));
     }
 }
